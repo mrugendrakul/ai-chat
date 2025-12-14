@@ -1,0 +1,27 @@
+:root {
+  color-scheme: light dark;
+  --background-color-custom:#eeeeee;
+  transition: all ease-in-out 0.3s;
+}
+
+body{
+  margin: 0px !important;
+}
+
+[theme='dark']{
+  --color-theme:#eff1f3;
+  color-scheme: dark;
+  color: var(--color-theme);
+  --background-color-custom: #5f5e5e;
+}
+[theme = 'light']{
+  color-scheme: light;
+   --background-color-custom:#eeeeee;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color: var(--color-theme);
+    --background-color-custom: #5f5e5e;
+  }
+}

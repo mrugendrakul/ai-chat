@@ -1,0 +1,11 @@
+@import url('./index.css');
+
+:root{
+  background: var(--background-color-custom);
+}
+
+.MainPage{
+  display:flex;
+  flex-direction: row;
+  gap:5px
+}

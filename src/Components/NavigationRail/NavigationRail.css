@@ -1,0 +1,85 @@
+.navigation-rail {
+    z-index: 10;
+    transition: all ease-in-out 500ms;
+}
+
+.navigation-rail-content {
+    background-color: rgb(195, 195, 253);
+    height: 100dvh;
+    border-radius: 20px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0;
+    transition: all ease-in-out 500ms;
+}
+
+.nav-rail-inside {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-content: space-between;
+    height: 100dvh;
+}
+
+.nav-chats {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+}
+
+.nav-button {
+    padding: 8px;
+    background: none;
+    border: none;
+    padding-left: 12px;
+    width: 100%;
+    display: flex;
+    justify-content: start;
+    transition: transform ease-in-out 500ms;
+}
+
+.nav-menu-button {
+    height: 24px;
+    width: 24px;
+    transition: all ease-in-out 250ms;
+}
+ .rotate-0 {
+    transform: rotate(0);
+}
+.rotate-180 {
+    /* rotate: 180deg; */
+   transform: rotate(180deg);
+}
+
+.nav-buttons-list{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 16px;
+}
+
+.nav-buttons-list .nav-buttons-item{
+    display: flex;
+    flex-direction: row;
+    padding:2px;
+    justify-content: start;
+    align-items: center;
+    background: none;
+    border: none;
+    border-radius: 15px;
+}
+
+.nav-buttons-list .nav-buttons-item:hover{
+    background-color: rgb(135, 135, 248);
+}
+
+.nav-buttons-item .nav-buttons-text{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.nav-buttons-item .nav-buttons-icon{
+    height: 24px;
+    width: 24px;
+}

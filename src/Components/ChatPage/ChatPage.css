@@ -1,0 +1,88 @@
+.ai-text-field{
+    width: 80%;
+    background-color: #49e7d9;
+    padding: 12px;
+    font-size: large;
+    font-family: sans-serif;
+    margin: 5px;
+    justify-content: center;
+    border-radius: 25px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.ai-text-area{
+    background:none;
+    border:none;
+    font-size: large;
+    width: 100%;
+}
+.ai-text-area:focus{
+    border: none;
+    outline: none;
+}
+
+.ai-message-send-wrapper{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: end;
+    margin: auto;
+    margin-top: 4px;
+}
+
+.ai-message-send{
+    border-radius: 30px;
+    
+}
+
+.message-list{
+    width: 100%;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.message-area{
+    /* height: 100%;
+    width: 100%; */
+    display: flex;
+    flex-direction:column ;
+    gap:10px;
+    flex: 1;
+}
+
+.user-message-block{
+    display: flex;
+    justify-content: end;
+    margin-right: 5px;
+    
+}
+
+.user-message-block-content{
+    background: #27aed4;
+    color: white;
+    padding:15px;
+    white-space: pre-wrap;
+    font-size: 18px;
+    max-width: 80%;
+    border-radius: 20px;
+    border-top-right-radius: 5px;
+}
+
+.ai-message-block{
+    display: flex;
+    margin:5px;
+    justify-content: center;
+}
+
+.ai-message-block-content{
+    width: 90%;
+    padding:15px;
+    white-space: pre-wrap;
+    font-size: 18px;
+}
+
+.message-list-loading{
+    
+}
