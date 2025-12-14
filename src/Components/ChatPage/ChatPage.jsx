@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useLayoutEffect, useReducer, useRef, useState } from 'react'
+import React, { Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import './ChatPage.css'
 import MessageList from './Messages/MessageList'
 import Send from '../../Icons/Send'
@@ -15,6 +15,7 @@ const ChatPage = () => {
     const minHeight = 25
 
     const [chatId, setChatId] = useState("693ee18bc352289e5057320a")
+    const counter = useRef(0)
 
     const [messageList, setMessageList] = useState([])
 
@@ -38,12 +39,11 @@ const ChatPage = () => {
     }, [chatId])
     useLayoutEffect(() => {
         const textArea = messageTextAreaRef.current;
-        console.log("Message height change --->")
+        // console.log("Message height change --->")
         if (textArea) {
             textArea.style.height = 'auto';
             const newHeight = Math.min(Math.max(minHeight, textArea.scrollHeight), maxHeight)
             textArea.style.height = `${newHeight}px`
-            console.log("newHei", newHeight)
             setMinHeight(newHeight)
         }
     }, [message])
@@ -52,12 +52,26 @@ const ChatPage = () => {
         e.preventDefault()
         const content = message
         setMessage("")
+        addMessage({
+            _id:counter.current,
+            role:"user",
+            content:content
+        })
+        counter.current = counter.current +1
         console.log("Form sumited")
         setIsLoading(true)
-        axios.post('localhost:8081/ai/send-message', {
+        axios.post('http://localhost:8081/ai/send-message', {
             chatId:chatId,
             role:"user",
             content:content,
+        })
+        .then((expensiveResponse)=>{
+            setIsLoading(false)
+            const message = expensiveResponse.data
+            addMessage(message)
+        })
+        .catch((e)=>{
+            console.error("error in api calling ",e)
         })
     }
 
@@ -95,9 +109,9 @@ const ChatPage = () => {
                     <button
                         className='ai-message-send'
                         type='submit'
-                        disabled={message === ""}
+                        disabled={message === "" || isLoading}
                     >
-                        <Send style={{ width: '24px', height: '24px' }} fill={message === ""
+                        <Send style={{ width: '24px', height: '24px' }} fill={message === "" || isLoading
                             ? '#a8a8a8ff' : '#000'
                         }
                         ></Send>

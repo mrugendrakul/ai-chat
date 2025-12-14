@@ -45,7 +45,7 @@
 
 .message-area{
     /* height: 100%;
-    width: 100%; */
+    /* width: 100%; */ */
     display: flex;
     flex-direction:column ;
     gap:10px;
@@ -68,16 +68,21 @@
     max-width: 80%;
     border-radius: 20px;
     border-top-right-radius: 5px;
+    overflow-x: hidden;
 }
 
 .ai-message-block{
     display: flex;
     margin:5px;
     justify-content: center;
+    /* overflow-x: hidden;
+    overflow-wrap: break-word;
+    word-break: break-all; */
 }
 
 .ai-message-block-content{
     width: 90%;
+    max-width: 90%;
     padding:15px;
     white-space: pre-wrap;
     font-size: 18px;
