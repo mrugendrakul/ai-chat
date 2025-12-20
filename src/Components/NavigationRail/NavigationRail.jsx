@@ -4,8 +4,12 @@ import NavigationButtons from './NavigationButtons'
 import Worker from '../../Icons/Worker'
 import Account from '../../Icons/Account'
 import './NavigationRail.css'
+import Add from '../../Icons/Add'
 
-const NavigationRail = () => {
+const NavigationRail = ({
+    chats,
+    addChat,
+}) => {
     const railStates = {
         normal: 'normal',
         expanded: 'expanded',
@@ -42,15 +46,15 @@ const NavigationRail = () => {
 
         return window.removeEventListener('resize ', () => { console.log("Task complete") })
     })
-// `${railState === railStates.expanded ? 'w-80' : 'w-20'}
+    // `${railState === railStates.expanded ? 'w-80' : 'w-20'}
     return (
         <div
             className='navigation-rail'
-            style={{width:`${railState === railStates.expanded ?'250px':'80px'}`}}
-            >
+            style={{ width: `${railState === railStates.expanded ? '250px' : '80px'}` }}
+        >
             <div
                 className='navigation-rail-content'
-                style={{width:`${railState === railStates.expanded ? '250px' : railState === railStates.hover ? ' 250px' : '80px'} `}}
+                style={{ width: `${railState === railStates.expanded ? '250px' : railState === railStates.hover ? ' 250px' : '80px'} ` }}
             >
                 <div className='nav-rail-inside'>
                     <div className='nav-chats'>
@@ -67,52 +71,42 @@ const NavigationRail = () => {
                         >
                             <Menu expanded={railState === railStates.expanded}
                                 // className={`h-8 w-8 ${railState === railStates.expanded ? 'rotate-0' : 'rotate-180'} transition-transform ease-in-out`} 
-                                className={`nav-menu-button ${railState === railStates.expanded ? 'rotate-0' : 'rotate-180'}` }
-                                />
+                                className={`nav-menu-button ${railState === railStates.expanded ? 'rotate-0' : 'rotate-180'}`}
+                            />
+                            
                         </button>
-                        <Activity
-                        mode={railState === railStates.expanded?"visible":"hidden"}
+                        <button
+                            onClick={addChat}
+                            className='nav-button '
                         >
-                        <NavigationButtons
-                            listOfButtons={[
-                                {
-                                    ButtonText: 'Hire Worker',
-                                    // ButtonIcon: <Worker className = "nav-buttons-icon" />,
-                                    // onMouseEnter: () => {
-                                    //     dispatchRailState({ railState: railStates.hover })
-                                    // },
-                                    // onMouseLeave: () => {
-                                    //     dispatchRailState({ railState: railStates.notHover })
-                                    // }
-                                },
-                                {
-                                    ButtonText: 'Hire Worker',
-                                    // ButtonIcon: <Worker className='nav-buttons-icon' />,
-                                    // onMouseEnter: () => {
-                                    //     dispatchRailState({ railState: railStates.hover })
-                                    // },
-                                    // onMouseLeave: () => {
-                                    //     dispatchRailState({ railState: railStates.notHover })
-                                    // }
+                            <Add
+                            className={`nav-menu-button`}
+                            />
+                            
+                        </button>
+                        
+                        <Activity
+                            mode={railState === railStates.expanded ? "visible" : "hidden"}
+                        >
+                            <NavigationButtons
+                                listOfButtons={chats
                                 }
-                            ]
-                            }
-                            expanded={railState === railStates.expanded || railState === railStates.hover}
-                        />
+                                expanded={railState === railStates.expanded || railState === railStates.hover}
+                            />
                         </Activity>
                     </div>
                     <div className='flex flex-col'>
 
                         <div
                             className={`flex flex-row justify-around p-4 mb-18 truncate text-clip`}
-                            // onMouseEnter={() => {
-                            //     dispatchRailState({ railState: railStates.hover })
-                            // }}
-                            // onMouseLeave={() => {
-                            //     dispatchRailState({ railState: railStates.notHover })
-                            // }}
+                        // onMouseEnter={() => {
+                        //     dispatchRailState({ railState: railStates.hover })
+                        // }}
+                        // onMouseLeave={() => {
+                        //     dispatchRailState({ railState: railStates.notHover })
+                        // }}
                         >
-                            <span className='ps-2'><Account style={{width:'24px',height:'24px'}} /></span>
+                            <span className='ps-2'><Account style={{ width: '24px', height: '24px' }} /></span>
                             <p className={`text-2xl delay-200 truncate 
                             text-clip ease-in-out transition-discrete
                             ${railState === railStates.expanded || railState === railStates.hover ? 'opacity-100' : 'opacity-0'}

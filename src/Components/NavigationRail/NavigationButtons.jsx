@@ -5,6 +5,7 @@ const NavigationButtons = ({ listOfButtons = [{
     ButtonText:'Button',
     onMouseEnter: () => { },
     onMouseLeave: () => { },
+    onClick : ()=>{},
 }
 ],expanded=false
 }) => {
@@ -15,6 +16,7 @@ const NavigationButtons = ({ listOfButtons = [{
                 key={index}
                     onMouseEnter={button.onMouseEnter}
                     onMouseLeave={button.onMouseLeave}
+                    onClick={button.onClick}
                 // onClick={() => {
                 //     dispatchRailState({ railState: railStates.hover })
                 // }

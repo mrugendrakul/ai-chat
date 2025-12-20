@@ -5,37 +5,49 @@ import Send from '../../Icons/Send'
 import axios from 'axios'
 import LoadingMessage from './Messages/LoadingMessage'
 
-const ChatPage = () => {
+const ChatPage = ({ chatId }) => {
 
     const [message, setMessage] = useState('')
     const messageTextAreaRef = useRef(null)
     const [textHeight, setMinHeight] = useState(40)
     const [isLoading, setIsLoading] = useState(true)
+    const [currentChat, setCurrentChat] = useState(
+        {
+            "_id": "693ee18bc352289e5057320a",
+            "chatName": "New Chat",
+        })
+    const [aiMessage, setAiMessage] = useState("")
+    const [aiDone, setAiDone] = useState(true)
     const maxHeight = 200
     const minHeight = 25
 
-    const [chatId, setChatId] = useState("693ee18bc352289e5057320a")
     const counter = useRef(0)
 
     const [messageList, setMessageList] = useState([])
 
     const addMessage = (message) => {
         setMessageList(prev =>
-            [...prev, message]
+            [message, ...prev]
         )
     }
     useEffect(() => {
-        axios.get('http://localhost:8081/ai/get-messages',
-            {
-                params: {
-                    chatId: chatId
+        if (chatId !== "") {
+            axios.get('http://localhost:8081/ai/get-messages',
+                {
+                    params: {
+                        chatId: chatId
+                    }
                 }
-            }
-        )
-            .then((response) => {
-                setMessageList(response.data)
-                setIsLoading(false)
-            })
+            )
+                .then((response) => {
+                    setMessageList(response.data?.reverse())
+                    setIsLoading(false)
+                })
+                .catch((err) => {
+                    setMessageList([])
+                    setIsLoading(false)
+                })
+        }
     }, [chatId])
     useLayoutEffect(() => {
         const textArea = messageTextAreaRef.current;
@@ -48,31 +60,92 @@ const ChatPage = () => {
         }
     }, [message])
 
-    const submitMessage = (e) => {
+    const getCurrentChat = () => {
+        axios.get('http://localhost:8081/ai/get-chat', {
+            params: {
+                chatId: chatId
+            }
+        })
+            .then((res) => {
+                setCurrentChat(res.data)
+            })
+            .catch(e => {
+                console.error("Getting error ", e)
+            })
+    }
+
+    const submitMessage = async (e) => {
         e.preventDefault()
         const content = message
         setMessage("")
+        const messageLenght = messageList.length
+        if (messageLenght === 0) {
+            getCurrentChat
+        }
+        counter.current = counter.current + 1
         addMessage({
-            _id:counter.current,
-            role:"user",
-            content:content
+            _id: counter.current,
+            role: "user",
+            content: content
         })
-        counter.current = counter.current +1
+        counter.current = counter.current + 1
+        addMessage({
+            _id: counter.current,
+            role: "assistant",
+            content: ""
+        })
         console.log("Form sumited")
         setIsLoading(true)
-        axios.post('http://localhost:8081/ai/send-message', {
-            chatId:chatId,
-            role:"user",
-            content:content,
-        })
-        .then((expensiveResponse)=>{
-            setIsLoading(false)
-            const message = expensiveResponse.data
-            addMessage(message)
-        })
-        .catch((e)=>{
-            console.error("error in api calling ",e)
-        })
+        const response = await fetch('http://localhost:8081/ai/send-message',
+            {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(
+                    {
+                        chatId: chatId,
+                        role: "user",
+                        content: content,
+                    }
+                )
+            }
+        )
+
+        if (!response.body) {
+            throw new Error("stream not allowed in browser")
+        }
+
+        const reader = response.body.getReader()
+        const decoder = new TextDecoder();
+        let aiTextAccumulator = "";
+        while (true) {
+            const { done, value } = await reader.read()
+            setAiDone(false)
+            if (done) {
+                // setAiDone(true)
+                // addMessage({
+                //     _id:aiTextAccumulator,
+                //     role:"assistant",
+                //     content:aiTextAccumulator
+                // })
+                setIsLoading(false)
+                break
+            };
+
+            const chuckText = decoder.decode(value, { stream: true })
+            aiTextAccumulator += chuckText
+            setMessageList(prev => {
+                const newList = [...prev]
+                // const lastIndex = newList.length -1;
+                newList[0] = {
+                    ...newList[0],
+                    content: aiTextAccumulator
+                }
+                return newList
+            }
+            )
+
+            // setAiMessage(aiTextAccumulator)
+        }
     }
 
     return (
@@ -81,8 +154,10 @@ const ChatPage = () => {
             width: '100%', display: 'flex', justifyContent: "center",
             flexDirection: 'column', alignItems: 'center'
         }}>
+            <h2>{chatId !== "" && currentChat.chatName}</h2>
             <MessageList messageList={messageList} />
-            {isLoading && <LoadingMessage />}
+            {/* {isLoading && (chatId !== "") && <LoadingMessage />} */}
+            {chatId !== "" && messageList.length === 0 ? <p>No messages here</p> : chatId === "" && <p>Select chat with id to start chatting.</p>}
             {/* <div className=''> */}
             <form onSubmit={submitMessage} className='ai-text-field'
                 style={{ height: `${textHeight}px` }}
